@@ -18,6 +18,7 @@ public class NoticeReg extends HttpServlet{
 		response.setCharacterEncoding("utf-8"); // 내가 보낼 파일 인코딩
 		response.setContentType("text/html; charset=UTF-8"); // 서버가 읽어야 할 파일 인코딩
 		
+		
 		PrintWriter out = response.getWriter();
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");

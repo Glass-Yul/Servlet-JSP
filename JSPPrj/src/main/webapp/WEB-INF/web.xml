@@ -31,6 +31,14 @@
     		<url-pattern>/hello</url-pattern>
 	</servlet-mapping> -->
 
+	<!-- <filter>
+		<filter-name>characterEncodingFilter</filter-name>
+		<filter-class>com.newlecture.web.filter.CharacterEncodingFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>characterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>모든 url에 대해 필터 적용
+	</filter-mapping> -->
 
   <display-name>Welcome to Tomcat</display-name>
   <description>
