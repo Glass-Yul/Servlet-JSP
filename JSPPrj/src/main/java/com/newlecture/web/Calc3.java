@@ -60,6 +60,7 @@ public class Calc3 extends HttpServlet{
 		if(operator != null && operator.equals("C")) // C 버튼을 눌렀을 때
 			expCookie.setMaxAge(0); // 쿠키 소멸 시키기	
 		
+		expCookie.setPath("/");
 		// 저장된 쿠키를 가지고 페이지 이동
 		response.addCookie(expCookie);
 		response.sendRedirect("calcpage");
