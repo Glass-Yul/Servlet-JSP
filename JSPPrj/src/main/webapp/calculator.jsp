@@ -1,8 +1,12 @@
+<%
+	int x = 3;
+	int y = 4;
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>덧셈 계산</title>
+<title>계산기</title>
 <style>
 	input{
 		width: 50px;
@@ -22,7 +26,7 @@
 	<form action="calc3" method="post">
 		<table>
 			<tr>
-				<td class="output" colspan="4">0</td>
+				<td class="output" colspan="4">${3+4 }</td>
 			</tr>
 			<tr>
 				<td><input type="submit" name="operator" value="CE"/></td>
