@@ -2,7 +2,7 @@ package com.newlecture.web.controller;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -53,7 +53,7 @@ public class NoticeDetailController extends HttpServlet{
 									files,
 									content);
 			request.setAttribute("n", notice);
-			
+		
 //			// 포워드 하기 전에 데이터 미리 저장해줌
 //			request.setAttribute("title", title);
 //			request.setAttribute("regDate", regDate);
@@ -72,7 +72,7 @@ public class NoticeDetailController extends HttpServlet{
 		}
 		
 		// 포워드하여 전달해줌
-		request.getRequestDispatcher("/notice/detail.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/view/notice/detail.jsp").forward(request, response);
 		
 	}
 }

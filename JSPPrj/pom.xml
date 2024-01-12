@@ -16,6 +16,15 @@
 	    <artifactId>js-scriptengine</artifactId>
 	    <version>19.2.0.1</version>
 	</dependency>
+	
+	<!-- JSTL -->
+	<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
+	<dependency>
+	    <groupId>javax.servlet</groupId>
+	    <artifactId>jstl</artifactId>
+	    <version>1.2</version>
+	</dependency>
+
 
   </dependencies>
   
