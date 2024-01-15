@@ -37,7 +37,7 @@ public class NoticeDetailController extends HttpServlet{
 			rs.next();
 			
 			String title = rs.getString("TITLE");
-			Date regDate = rs.getDate("REGDATE");
+			Date regDate = rs.getTimestamp("REGDATE");
 			String writerId = rs.getString("WRITER_ID");
 			String hit = rs.getString("HIT");
 			String files = rs.getString("FILES");
