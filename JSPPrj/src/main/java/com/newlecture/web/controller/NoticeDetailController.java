@@ -22,6 +22,9 @@ public class NoticeDetailController extends HttpServlet{
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int id = Integer.parseInt(request.getParameter("id"));	
 
+		String field = request.getParameter("f");
+		String query = request.getParameter("q");
+		
 		String driver = "com.mysql.cj.jdbc.Driver";
 		String url = "jdbc:mysql://127.0.0.1:3306/JSP?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8";
 		String sql = "SELECT * FROM NOTICE WHERE ID=?";
