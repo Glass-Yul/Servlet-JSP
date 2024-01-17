@@ -38,23 +38,23 @@ public class NoticeService {
 	public List<Notice> getNoticeList(String field, String query, int page){
 		
 		String sql = "SELECT * FROM ("
-				+ "	  SELECT	 ROW_NUMBER() OVER(ORDER BY ID DESC) AS ROWNUM,"
-				+ "   NOTICE.* FROM NOTICE WHERE "+field+" LIKE ? ORDER BY REGDATE DESC) N"
-				+ "   WHERE ROWNUM BETWEEN ? AND ?";
+				+ "	  SELECT ROWNUM NUM, N.*"
+				+ "   FROM (SELECT * FROM NOTICE WHERE "+ field +" LIKE ? ORDER BY REGDATE DESC) N )"
+				+ "   WHERE NUM BETWEEN ? AND ?";
 		
 		
 		List<Notice> list = new ArrayList<Notice>();
 		
-//		String driver = "com.mysql.cj.jdbc.Driver";
-//		String url = "jdbc:mysql://127.0.0.1:3306/JSP?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8";
 		//1. JDBC Driver 로딩
 		try {    
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, userid, passwd);
+			
 			PreparedStatement st = con.prepareStatement(sql);
 			st.setString(1, "%"+query+"%");
 			st.setInt(2, 1+(page-1)*10);
 			st.setInt(3, page*10);
+			
 			ResultSet rs = st.executeQuery();
 			
 			while(rs.next()){
@@ -103,11 +103,9 @@ public class NoticeService {
 		int count = 0;
 		
 		String sql = "SELECT COUNT(ID) COUNT FROM ("
-				+ "	  SELECT	 ROW_NUMBER() OVER(ORDER BY ID DESC) AS ROWNUM,"
-				+ "   NOTICE.* FROM NOTICE WHERE "+field+" LIKE ? ORDER BY REGDATE DESC) N";
+				+ "	  SELECT ROWNUM NUM, N.* FROM"
+				+ "   FROM (SELECT * FROM NOTICE WHERE "+ field +" LIKE ? ORDER BY REGDATE DESC) N )";
 		
-//		String driver = "com.mysql.cj.jdbc.Driver";
-//		String url = "jdbc:mysql://127.0.0.1:3306/JSP?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8";
 		//1. JDBC Driver 로딩
 		try {    
 			Class.forName(driver);
@@ -119,7 +117,7 @@ public class NoticeService {
 			ResultSet rs = st.executeQuery();
 			
 			if(rs.next())
-				count = rs.getInt("count");
+				count = rs.getInt("count"); // 결과 저장
 
 			rs.close();
 		    st.close();
@@ -140,8 +138,6 @@ public class NoticeService {
 		
 		String sql = "SELECT * FROM NOTICE WHERE ID=?";
 		
-//		String driver = "com.mysql.cj.jdbc.Driver";
-//		String url = "jdbc:mysql://127.0.0.1:3306/JSP?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8";
 		//1. JDBC Driver 로딩
 		try {    
 			Class.forName(driver);
@@ -190,10 +186,11 @@ public class NoticeService {
 	public Notice getNextNotice(int id) {
 		Notice notice = null;
 		
-		String sql = "SELECT * FROM NOTICE WHERE ID > ? ORDER BY REGDATE ASC LIMIT 1";
+		String sql = "SELECT * FROM NOTICE WHERE ID = ("
+				+ "   SELECT ID FROM NOTICE"
+				+ "   WHERE REGDATE >= (SELECT REGDATE FROM NOTICE WHERE ID = ?)"
+				+ "   AND ROWNUM = 1)";
 		
-//		String driver = "com.mysql.cj.jdbc.Driver";
-//		String url = "jdbc:mysql://127.0.0.1:3306/JSP?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8";
 		//1. JDBC Driver 로딩
 		try {    
 			Class.forName(driver);
@@ -241,10 +238,10 @@ public class NoticeService {
 	public Notice getPrevNotice(int id) {
 		Notice notice = null;
 		
-		String sql = "SELECT MAX(ID) FROM NOTICE WHERE REGDATE < (SELECT REGDATE FROM NOTICE WHERE ID=?)";
+		String sql = "SECET ID FROM (SELECT * FROM NOTICE ORDER BY REGDATE DESC)"
+				+ "   WHERE REGDATE < (SELECT REGDATE FROM NOTICE WHERE ID=?)"
+				+ "   AND ROWNUM = 1";
 		
-//		String driver = "com.mysql.cj.jdbc.Driver";
-//		String url = "jdbc:mysql://127.0.0.1:3306/JSP?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8";
 		//1. JDBC Driver 로딩
 		try {    
 			Class.forName(driver);

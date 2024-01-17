@@ -36,10 +36,10 @@ public class NoticeListController extends HttpServlet{
 		// list로 담아야 하니깐 while문이 끝난 후 request에 담아줌
 		request.setAttribute("list", list);
 		
-		// 페이징 처리를 위해 갯수 가져옴
-		int count = service.getNoticeCount(field, query);
-		request.setAttribute("list", list);
-		request.setAttribute("count", count);
+//		// 페이징 처리를 위해 갯수 가져옴
+//		int count = service.getNoticeCount(field, query);
+//		request.setAttribute("list", list);
+//		request.setAttribute("count", count);
 		
 		
 		// 포워드하여 전달해줌

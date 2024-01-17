@@ -5,16 +5,15 @@
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!-- ------------------------------------------------------ -->
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>코딩 전문가를 만들기 위한 온라인 강의 시스템</title>
     <meta charset="UTF-8">
-    <title>공지사항목록</title>
+    <title>게시글 목록</title>
     
     <link href="/css/customer/layout.css" type="text/css" rel="stylesheet" />
     <style>
@@ -190,7 +189,7 @@
 					
 					<c:forEach var="n" items="${list }" varStatus="st">
 					<tr>
-						<td>${st.index} / ${n.id }</td>
+						<td>${n.id }</td> <!-- [ ${st.index} / ] 이거 지웠음. 왜 작성했는지는 모름 ㅋㅋㅋㅋㅋ -->
 						<td class="title indent text-align-left"><a href="detail?id=${n.id }">${n.title }</a></td>
 						<td>${n.writerId }</td>
 						<td>
@@ -206,17 +205,19 @@
 				</table>
 			</div>
 			
+		<c:set var="page" value="${(empty param.p) ? 1 : param.p }"></c:set>
+		<c:set var="startNum" value="${page - (page-1) % 5 }"></c:set>
+		<c:set var="lastNum" value="${fn:substringBefore(Math.ceil(count/10),'.')}"></c:set>
+	
+			
 			<div class="indexer margin-top align-right">
 				<h3 class="hidden">현재 페이지</h3>
-				<div><span class="text-orange text-strong">${(empty param.p) ? 1 : param.p }</span> / 1 pages</div>
+				<div><span class="text-orange text-strong">${(empty param.p) ? 1 : param.p }</span> / ${lastNum }</div>
 			</div>
 
 			<div class="margin-top align-center pager">	
 			
-	<c:set var="page" value="${(empty param.p) ? 1 : param.p }"></c:set>
-	<c:set var="startNum" value="${page - (page-1) % 5 }"></c:set>
-	<c:set var="lastNum" value="${count/10 }"></c:set>
-		
+	
 	<div>
 		<c:if test="${startNum > 1}">
 			<a href="?p=${startNum-1 }&t=&q=" class="btn btn-prev" >이전</a>
@@ -229,14 +230,16 @@
 	
 	<ul class="-list- center">
 		<c:forEach var="i" begin="0" end="4">
+			<c:if test="${(startNum+i) <= lastNum }">
 			<li><a class="-text- ${(page==(startNum+i)) ? 'orange' : '' } orange bold" href="?p=${startNum+i }&t=&q=" >${i+1 }</a></li>
+			</c:if>
 		</c:forEach>
 	</ul>
 	<div>
-		<c:if test="${startNum+5 < lastNum }">
+		<c:if test="${startNum+4 < lastNum }">
 			<a href="?p=${startNum+5 }&t=&q=" class="btn btn-prev" >다음</a>
 		</c:if>
-		<c:if test="${ startNum+5 >= lastNum }">
+		<c:if test="${ startNum+4 >= lastNum }">
 			<span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
 		</c:if>
 	</div>
