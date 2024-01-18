@@ -190,7 +190,7 @@
 					<c:forEach var="n" items="${list }" varStatus="st">
 					<tr>
 						<td>${n.id }</td> <!-- [ ${st.index} / ] 이거 지웠음. 왜 작성했는지는 모름 ㅋㅋㅋㅋㅋ -->
-						<td class="title indent text-align-left"><a href="detail?id=${n.id }">${n.title }</a></td>
+						<td class="title indent text-align-left"><a href="detail?id=${n.id }">${n.title }</a><span>[${n.replyCount }]</span></td>
 						<td>${n.writerId }</td>
 						<td>
 							<fmt:formatDate pattern="yyyy-MM-dd" value="${n.regDate }"/>
@@ -231,13 +231,16 @@
 	<ul class="-list- center">
 		<c:forEach var="i" begin="0" end="4">
 			<c:if test="${(startNum+i) <= lastNum }">
-			<li><a class="-text- ${(page==(startNum+i)) ? 'orange' : '' } orange bold" href="?p=${startNum+i }&t=&q=" >${i+1 }</a></li>
+			<li>
+				<a class="-text- ${(page==(startNum+i)) ? 'orange' : '' } bold" href="?p=${startNum+i }&f=${param.f }&q=${param.q }" >${startNum+i }</a>
+				
+			</li>
 			</c:if>
 		</c:forEach>
 	</ul>
 	<div>
 		<c:if test="${startNum+4 < lastNum }">
-			<a href="?p=${startNum+5 }&t=&q=" class="btn btn-prev" >다음</a>
+			<a href="?p=${startNum+5 }&f=&q=" class="btn btn-prev" >다음</a>
 		</c:if>
 		<c:if test="${ startNum+4 >= lastNum }">
 			<span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
