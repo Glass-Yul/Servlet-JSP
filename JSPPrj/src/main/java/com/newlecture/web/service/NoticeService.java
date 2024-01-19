@@ -38,9 +38,37 @@ public class NoticeService {
     	return 0;
     }
     public int insertNotice(Notice notice){
+    	int result = 0;
+		String params = "";
+		
+		String sql = "INSERT INTO NOTICE (TITLE, CONTENT, WRITER_ID, PUB, REGDATE)"
+				+ "   VALUES (?, ?, ?, ?, SYSDATE)";
+		
+		//1. JDBC Driver 로딩
+		try {    
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setString(1, notice.getTitle());
+			st.setString(2, notice.getContent());
+			st.setString(3, notice.getWriterId());
+			st.setBoolean(4, notice.getPub());
+			
+			result = st.executeUpdate();
+			
+		    st.close();
+		    con.close();             	
+
+		} catch (ClassNotFoundException e) { 
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return result;
     	
-    	
-    	return 0;
     }
     public int deleteNotice(int id){
     	
@@ -102,6 +130,7 @@ public class NoticeService {
 				String files = rs.getString("FILES");
 				//String content = rs.getString("CONTENT"); // 현재 테이블이 view 이여서 빼줘야 함
 				int replyCount = rs.getInt("R_COUNT");
+				boolean pub = rs.getBoolean("pub");
 				
 				// 객체로 만든 Notice에 DB에서 받아온 데이터를 저장함
 				NoticeView notice = new NoticeView(
@@ -111,6 +140,7 @@ public class NoticeService {
 										writerId,
 										hit,
 										files,
+										pub,
 										//content,
 										replyCount
 										);
@@ -195,6 +225,7 @@ public class NoticeService {
 				String hit = rs.getString("HIT");
 				String files = rs.getString("FILES");
 				String content = rs.getString("CONTENT");
+				boolean pub = rs.getBoolean("pub");
 				
 				// 객체로 만든 Notice에 DB에서 받아온 데이터를 저장함
 				notice = new Notice(
@@ -204,7 +235,9 @@ public class NoticeService {
 						writerId,
 						hit,
 						files,
-						content);
+						content,
+						pub
+						);
 			}
 		    
 
@@ -248,6 +281,7 @@ public class NoticeService {
 				String hit = rs.getString("HIT");
 				String files = rs.getString("FILES");
 				String content = rs.getString("CONTENT");
+				boolean pub = rs.getBoolean("pub");
 				
 				// 객체로 만든 Notice에 DB에서 받아온 데이터를 저장함
 				notice = new Notice(
@@ -257,7 +291,9 @@ public class NoticeService {
 						writerId,
 						hit,
 						files,
-						content);
+						content,
+						pub
+						);
 			}
 		    
 
@@ -299,6 +335,7 @@ public class NoticeService {
 				String hit = rs.getString("HIT");
 				String files = rs.getString("FILES");
 				String content = rs.getString("CONTENT");
+				boolean pub = rs.getBoolean("pub");
 				
 				// 객체로 만든 Notice에 DB에서 받아온 데이터를 저장함
 				notice = new Notice(
@@ -308,7 +345,9 @@ public class NoticeService {
 						writerId,
 						hit,
 						files,
-						content);
+						content,
+						pub
+						);
 			}
 		    
 
@@ -323,6 +362,41 @@ public class NoticeService {
 		}
 		
 		return notice;
+	}
+	public int deleteNoticeAll(int[] ids) {
+		
+		int result = 0;
+		String params = "";
+		
+		for(int i=0;i<ids.length;i++) { // id 값 나눠서 출력하기 위한 제어문
+			params += ids[i];
+			
+			if(i < ids.length-1) // 마지막에는 ','를 안 붙여줌
+				params += ", ";
+		}
+		
+		String sql = "DELETE NOTICE WHERE ID IN ("+params+")";
+		
+		//1. JDBC Driver 로딩
+		try {    
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			
+			Statement st = con.createStatement();
+			
+			result = st.executeUpdate(sql);
+			
+		    st.close();
+		    con.close();             	
+
+		} catch (ClassNotFoundException e) { 
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return result;
 	}
 	
 }

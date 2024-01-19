@@ -12,12 +12,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/admin/notice/list")
+@WebServlet("/admin/board/notice/list")
 public class ListController extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		
 		// 대체 변수
 		String field_ = request.getParameter("f"); // 조건
 		String query_ = request.getParameter("q"); // 검색 내용
@@ -51,6 +50,30 @@ public class ListController extends HttpServlet{
 		request.getRequestDispatcher("/WEB-INF/view/admin/board/notice/list.jsp")
 				.forward(request, response);
 				
+	}
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String[] openIds = request.getParameterValues("open-id");
+		String[] delIds = request.getParameterValues("del-id");
+		String cmd = request.getParameter("cmd");
+		
+		switch(cmd) {
+		case "일괄공개" : 
+			for(String openId : openIds)
+				System.out.printf("open-id : %s\n", openId);
+			break;
+		case "일괄삭제":
+			NoticeService service = new NoticeService();
+			int[] ids = new int[delIds.length];
+			for(int i=0;i<delIds.length;i++)
+					ids[i] = Integer.parseInt(delIds[i]);
+			
+			int result = service.deleteNoticeAll(ids);
+			break;
+		}
+		
+		response.sendRedirect("list"); // 다시 get 요청을 하여 현재 페이지로 이동
 		
 	}
 }
